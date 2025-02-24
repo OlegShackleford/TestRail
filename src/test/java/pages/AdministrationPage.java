@@ -52,4 +52,6 @@ public class AdministrationPage extends BasePage {
         driver.findElement(BUTTON_USERS_AND_ROLES).click();
         return this;
     }
+
+
 }

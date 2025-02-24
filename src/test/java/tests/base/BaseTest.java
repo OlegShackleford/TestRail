@@ -5,9 +5,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
-import pages.AdministrationPage;
-import pages.DashboardPage;
-import pages.LoginPage;
+import pages.*;
 import utils.AllureUtils;
 import utils.PropertyReader;
 
@@ -19,6 +17,8 @@ public class BaseTest {
     public LoginPage loginPage;
     public DashboardPage dashboardPage;
     public AdministrationPage administrationPage;
+    public ProjectsOverviewPage overviewPage;
+    public ProjectsPage projectsPage;
 
     protected final String user = System.getProperty("user", PropertyReader.getProperty("user"));
     protected final String password = System.getProperty("password", PropertyReader.getProperty("password"));
@@ -32,6 +32,8 @@ public class BaseTest {
         loginPage = new LoginPage(driver);
         dashboardPage = new DashboardPage(driver);
         administrationPage = new AdministrationPage(driver);
+        overviewPage = new ProjectsOverviewPage(driver);
+        projectsPage = new ProjectsPage(driver);
     }
 
     @AfterMethod(alwaysRun = true)
