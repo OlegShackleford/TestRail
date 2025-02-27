@@ -17,7 +17,8 @@ public class ProjectsOverviewPage extends BasePage{
     private final static By INPUT_EXPECTED_RESULT = By.xpath("//div[@id = 'custom_expected_display']");
     private final static By BUTTON_ACCEPT_TESTCASE = By.xpath("//button[@id = 'accept']");
     private final static By TESTCASE_TITLE = By.xpath("//div[@data-testid = 'testCaseContentHeaderTitle']");
-    private final static String INNER_FIELDS = "//span[text() = 'Preconditions']//following::div[@class = 'markdown'][%s]";
+    private final static By TESTCASE_ANNOUNCEMENT = By.xpath("//div[@data-testid = 'projectAnnouncement']");
+    private final static String INNER_FIELDS_OF_TESTCASE = "//span[text() = 'Preconditions']//following::div[@class = 'markdown'][%s]";
 
     public ProjectsOverviewPage(WebDriver driver) {
         super(driver);
@@ -27,6 +28,11 @@ public class ProjectsOverviewPage extends BasePage{
     public String modifyUrl(String id){
         log.info("Modify url with id: {}",id);
         return String.format(URL,id);
+    }
+
+    public String getAnnouncement(){
+        log.info("Get announcement");
+        return driver.findElement(TESTCASE_ANNOUNCEMENT).getText();
     }
 
     @Override
@@ -72,13 +78,15 @@ public class ProjectsOverviewPage extends BasePage{
         return this;
     }
 
+    @Step
     public String getTitleTestCase(){
         log.info("Get title of TestCase");
         return driver.findElement(TESTCASE_TITLE).getText();
     }
 
-    public String getInnerFields(String number){
-        log.info("Get inner field");
-        return driver.findElement(By.xpath(String.format(INNER_FIELDS,number))).getText();
+    @Step("Get inner fields of testcase")
+    public String getInnerFieldsOfTestcase(String number){
+        log.info("Get inner field: {}",number);
+        return driver.findElement(By.xpath(String.format(INNER_FIELDS_OF_TESTCASE,number))).getText();
     }
 }

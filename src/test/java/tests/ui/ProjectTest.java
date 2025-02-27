@@ -1,17 +1,27 @@
 package tests.ui;
 
-import org.testng.Assert;
+import io.qameta.allure.*;
 import org.testng.annotations.Test;
+import org.testng.asserts.SoftAssert;
 import tests.base.BaseTest;
 
 public class ProjectTest extends BaseTest {
 
     String nameOfProject = "ProjectFromIDE";
     String announcementField = "Announcement field from IDE";
+    SoftAssert softAssert = new SoftAssert();
 
-    @Test
-    public void checkCreateProject(){
-        loginPage.open().isPageOpened().login(user,password);
+    @Test(testName = "Check create project", description = "In this test, a project is created, " +
+            "after checks it is deleted and a check for deletion")
+    @Description("Check create project, then assertion main fields and after delete project with assertion")
+    @Story("The QA engineer checks for create,and delete project")
+    @Owner("Oleg")
+    @Severity(SeverityLevel.CRITICAL)
+    public void checkCreateAndDeleteProject() {
+        loginPage.
+                open().
+                isPageOpened().
+                login(user, password);
 
         dashboardPage
                 .open()
@@ -19,9 +29,20 @@ public class ProjectTest extends BaseTest {
                 .clickAddProject()
                 .inputName(nameOfProject)
                 .inputAnnouncement(announcementField)
-                .clickToCheckBox()
+                .clickToCheckBoxShowAnnouncement()
                 .clickConfirmAddProject();
 
-        Assert.assertEquals(projectsPage.getSuccessMessage(),"Successfully added the new project.");
+        softAssert.assertEquals(overviewPage.getTitleTestCase(), nameOfProject, "Incorrect project name");
+        softAssert.assertEquals(overviewPage.getAnnouncement(), announcementField, "Incorrect text");
+
+        projectsPage.
+                open().
+                clickButtonDelete(nameOfProject).
+                clickCheckboxDelete().
+                clickOk();
+
+        softAssert.assertEquals(projectsPage.getDeleteMessage(), "Successfully deleted the project.",
+                "The was not project delete");
+        softAssert.assertAll();
     }
 }
